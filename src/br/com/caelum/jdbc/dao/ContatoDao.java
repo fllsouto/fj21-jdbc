@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.caelum.jdbc.ConnectionFactory;
+import br.com.caelum.jdbc.exception.DAOException;
 import br.com.caelum.jdbc.modelo.Contato;
 
 public class ContatoDao {
@@ -32,15 +33,14 @@ public class ContatoDao {
 			
 			// seta os valores
 			stmt.setString(1, contato.getNome());
-			stmt.setString(2, contato.getNome());
-			stmt.setString(3, contato.getNome());
+			stmt.setString(2, contato.getEmail());
+			stmt.setString(3, contato.getEndereco());
 			stmt.setDate(4, new Date(
 					contato.getDataNascimento().getTimeInMillis()));
 			
 			// executa
 			stmt.execute();
 			stmt.close();
-			
 		} catch (SQLException e) {
 			throw new DAOException(
 					"Erro SQLException ao executar o método adiciona da classe ContatoDao",
@@ -51,6 +51,57 @@ public class ContatoDao {
 					e);
 		}
 	}
+	
+	public void altera(Contato contato) {
+		String sql = "update contatos set nome=?, email=?," +
+				"endereco=?, dataNascimento=? where id = ?";
+		
+		try {
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			// seta os valores
+			stmt.setString(1, contato.getNome());
+			stmt.setString(2, contato.getEmail());
+			stmt.setString(3, contato.getEndereco());
+			stmt.setDate(4, new Date(
+					contato.getDataNascimento().getTimeInMillis()));
+			stmt.setLong(5, contato.getId());
+			
+			
+			// executa
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new DAOException(
+					"Erro SQLException ao executar o método getLista da classe ContatoDao",
+					e);
+		}  catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
+		}
+	}
+
+	public boolean remove(Contato contato) {
+		String sql = "DELETE from contatos where id = ?";
+		Optional<Contato> contatoOpcional = getById(contato.getId());
+		try {
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			stmt.setLong(1, contato.getId());
+			stmt.execute();
+			stmt.close();
+
+			return contatoOpcional.isPresent();
+		} catch (SQLException e) {
+			throw new DAOException(
+					"Erro SQLException ao executar o método getLista da classe ContatoDao",
+					e);
+		}  catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
+		}
+	}
+
 
 	public List<Contato> getLista() {
 		try {
@@ -150,6 +201,4 @@ public class ContatoDao {
 		contato.setDataNascimento(data);
 		return contato;
 	}
-
-
 }

@@ -11,7 +11,7 @@ public class TestaBuscaPorNome {
 	public static void main(String[] args) {
 		ContatoDao dao = new ContatoDao();
 		
-		String nome = "Caelum";
+		String nome = "fellipe";
 		Optional<Contato> contatoOpcional = dao.getByNome(nome);
 		
 		ContatoPresenter presenter = new ContatoPresenter();

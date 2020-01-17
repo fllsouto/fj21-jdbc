@@ -13,7 +13,7 @@ public class TestaInsere {
 		Contato contato = new Contato();
 		contato.setNome("Caelum");
 		contato.setEmail("contato@caelum.com.br");
-		contato.setEmail("R. Vergueir 3185 cj57");
+		contato.setEndereco("R. Vergueiro 3185 cj57");
 		contato.setDataNascimento(Calendar.getInstance());
 		
 		// grave nessa conexão!!
