@@ -6,15 +6,15 @@ import br.com.caelum.jdbc.dao.ContatoDao;
 import br.com.caelum.jdbc.modelo.Contato;
 import br.com.caelum.jdbc.util.ContatoPresenter;
 
-public class TestaBuscaPorNome {
+public class TestaBuscaPorId {
 
 	public static void main(String[] args) {
+		Long id = 1l;
 		ContatoDao dao = new ContatoDao();
 		
-		String nome = "Caelum";
-		Optional<Contato> contatoOpcional = dao.getByNome(nome);
-		
+		Optional<Contato> contatoOpcional = dao.getById(id);
 		ContatoPresenter presenter = new ContatoPresenter();
+		
 		System.out.println(presenter.present(contatoOpcional));
 	}
 }

@@ -81,7 +81,7 @@ public class ContatoDao {
 		}
 	}
 
-	public Optional<Contato> getContatoByNome(String nome) {
+	public Optional<Contato> getByNome(String nome) {
 		String sql = "select * from contatos " +
 				"where nome = '" + nome + "'";
 
@@ -89,12 +89,7 @@ public class ContatoDao {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) {
-				Contato contato = extractContato(rs);
-				return Optional.ofNullable(contato);
-			} else {
-				return Optional.ofNullable(null);
-			}
+			return extractContatoIfExists(rs);
 
 		} catch (SQLException e) {
 			throw new DAOException(
@@ -106,6 +101,36 @@ public class ContatoDao {
 					e);
 		}
 
+	}
+
+	public Optional<Contato> getById(Long id) {
+		String sql = "select * from contatos " +
+				"where id = '" + id + "'";
+
+		try {
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+
+			return extractContatoIfExists(rs);
+
+		} catch (SQLException e) {
+			throw new DAOException(
+					"Erro SQLException ao executar o método getLista da classe ContatoDao",
+					e);
+		}  catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
+		}
+	}
+
+	private Optional<Contato> extractContatoIfExists(ResultSet rs) throws SQLException {
+		if (rs.next()) {
+			Contato contato = extractContato(rs);
+			return Optional.ofNullable(contato);
+		} else {
+			return Optional.ofNullable(null);
+		}
 	}
 
 	private Contato extractContato(ResultSet rs) throws SQLException {
@@ -123,4 +148,6 @@ public class ContatoDao {
 		contato.setDataNascimento(data);
 		return contato;
 	}
+
+
 }

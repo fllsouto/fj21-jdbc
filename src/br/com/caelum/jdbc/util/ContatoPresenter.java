@@ -10,6 +10,7 @@ public class ContatoPresenter {
 
 	public String present(Contato contato) {
 		StringBuilder builder = new StringBuilder();
+		builder.append("Id: " + contato.getId() + "\n");
 		builder.append("Nome: " + contato.getNome() + "\n");
 		builder.append("Email: " + contato.getEmail() + "\n");
 		builder.append("Endereço: " + contato.getEndereco() + "\n");
