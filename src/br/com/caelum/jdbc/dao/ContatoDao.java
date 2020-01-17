@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import br.com.caelum.jdbc.ConnectionFactory;
 import br.com.caelum.jdbc.modelo.Contato;
@@ -59,18 +60,7 @@ public class ContatoDao {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				Contato contato = new Contato();
-
-				// criando o objeto Contato
-				contato.setId(rs.getLong("id"));
-				contato.setNome(rs.getString("nome"));
-				contato.setEmail(rs.getString("email"));
-				contato.setEndereco(rs.getString("endereco"));
-
-				// monstando a data através do Calendar
-				Calendar data = Calendar.getInstance();
-				data.setTime(rs.getDate("dataNascimento"));
-				contato.setDataNascimento(data);
+				Contato contato = extractContato(rs);
 
 				// adiciona o objeto a lista
 				contatos.add(contato);
@@ -89,5 +79,48 @@ public class ContatoDao {
 					"Erro genérico ao executar o método adiciona da classe ContatoDao",
 					e);
 		}
+	}
+
+	public Optional<Contato> getContatoByNome(String nome) {
+		String sql = "select * from contatos " +
+				"where nome = '" + nome + "'";
+
+		try {
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				Contato contato = extractContato(rs);
+				return Optional.ofNullable(contato);
+			} else {
+				return Optional.ofNullable(null);
+			}
+
+		} catch (SQLException e) {
+			throw new DAOException(
+					"Erro SQLException ao executar o método getLista da classe ContatoDao",
+					e);
+		}  catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
+		}
+
+	}
+
+	private Contato extractContato(ResultSet rs) throws SQLException {
+		Contato contato = new Contato();
+
+		// criando o objeto Contato
+		contato.setId(rs.getLong("id"));
+		contato.setNome(rs.getString("nome"));
+		contato.setEmail(rs.getString("email"));
+		contato.setEndereco(rs.getString("endereco"));
+
+		// monstando a data através do Calendar
+		Calendar data = Calendar.getInstance();
+		data.setTime(rs.getDate("dataNascimento"));
+		contato.setDataNascimento(data);
+		return contato;
 	}
 }

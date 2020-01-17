@@ -6,23 +6,17 @@ import java.util.List;
 
 import br.com.caelum.jdbc.dao.ContatoDao;
 import br.com.caelum.jdbc.modelo.Contato;
+import br.com.caelum.jdbc.util.ContatoPresenter;
 
 public class TestaLista {
 
 	public static void main(String[] args) {
 		ContatoDao dao = new ContatoDao();
 		List<Contato> contatos = dao.getLista();
+		ContatoPresenter presenter = new ContatoPresenter();
 		
 		for (Contato contato : contatos) {
-			System.out.println("Nome: " + contato.getNome());
-			System.out.println("Email: " + contato.getEmail());
-			System.out.println("Endereço: " + contato.getEndereco());
-
-			Date data = contato.getDataNascimento().getTime();
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			
-			System.out.println("Data de Nascimento: " + 
-					formatter.format(data) + "\n");
+			System.out.println(presenter.present(contato));
 		}
 	}
 }
