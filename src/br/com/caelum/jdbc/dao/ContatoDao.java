@@ -83,10 +83,11 @@ public class ContatoDao {
 
 	public Optional<Contato> getByNome(String nome) {
 		String sql = "select * from contatos " +
-				"where nome = '" + nome + "'";
+				"where nome = ?";
 
 		try {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			stmt.setString(1, nome);
 			ResultSet rs = stmt.executeQuery();
 
 			return extractContatoIfExists(rs);
@@ -105,10 +106,11 @@ public class ContatoDao {
 
 	public Optional<Contato> getById(Long id) {
 		String sql = "select * from contatos " +
-				"where id = '" + id + "'";
+				"where id = ?";
 
 		try {
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
 
 			return extractContatoIfExists(rs);
