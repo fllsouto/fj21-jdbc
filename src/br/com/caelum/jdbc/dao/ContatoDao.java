@@ -41,7 +41,13 @@ public class ContatoDao {
 			stmt.close();
 			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DAOException(
+					"Erro SQLException ao executar o método adiciona da classe ContatoDao",
+					e);
+		} catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
 		}
 	}
 
@@ -75,7 +81,13 @@ public class ContatoDao {
 			return contatos;
 
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DAOException(
+					"Erro SQLException ao executar o método getLista da classe ContatoDao",
+					e);
+		}  catch (Exception e) {
+			throw new DAOException(
+					"Erro genérico ao executar o método adiciona da classe ContatoDao",
+					e);
 		}
 	}
 }
